@@ -45,12 +45,6 @@ repos:
     rev: "v1.4.5"
     hooks:
       - id: scan
-  - repo: https://github.com/returntocorp/semgrep
-    rev: "v0.82.0"
-    hooks:
-      - id: semgrep
-        args:
-          ["--config", "auto", "--error", "--skip-unknown-extensions", "src"]
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.2
     hooks:
