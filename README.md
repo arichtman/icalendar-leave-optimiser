@@ -6,6 +6,8 @@ Optimising calendar leave
 
 ### Setup
 
+Download a local copy of [sample iCalendar file](https://www.officeholidays.com/ics-clean/australia/queensland).
+
 Using Ubuntu with PPA DeadSnakes
 
 ```Bash
@@ -16,6 +18,9 @@ poetry install
 poetry shell
 pre-commit install
 
+cal-opt sample.ics
 ```
+
+When using VSCode, set your interpreter to `poetry env info --path`, this'll allow linting and IDE tools to use the Poetry environment.
 
 If you get `int object is not callable` when running `jake` it's [known issue](https://github.com/sonatype-nexus-community/jake/issues/100), fix with `jake ddt --clear-cache`

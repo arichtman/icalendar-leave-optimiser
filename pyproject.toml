@@ -20,6 +20,9 @@ Changelog = "https://github.com/arichtman/cal-opt/releases"
 [tool.poetry.dependencies]
 python = "^3.11"
 python-dotenv = "^0.19.2"
+click = "^8.0.4"
+icalendar = "^4.0.9"
+ics = "^0.7"
 
 [tool.poetry.dev-dependencies]
 mkdocs = "^1.2.2"
