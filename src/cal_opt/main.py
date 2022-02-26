@@ -3,6 +3,8 @@ import os
 
 import click
 from dotenv import load_dotenv
+from ics import Calendar as ics_cal
+
 
 logger = logging.getLogger("cal-opt")
 load_dotenv()
@@ -26,13 +28,7 @@ def cli(calendar_file, debug) -> None:
         logging.basicConfig(level=logging.INFO)
 
     with open(calendar_file, "r") as file_in:
-        from ics import Calendar as ics_cal
-
         cal = ics_cal(imports=file_in.read())
-        # cal = ics_cal.parse_multiple(file_in.read())
-        # icalendar falls over on parsing and there's no advanced logging to enable
-        # from icalendar import Calendar, Event
-        # cal = Calendar.from_ical(file_in.read())
         from pprint import pprint
 
         for event in cal.events:
