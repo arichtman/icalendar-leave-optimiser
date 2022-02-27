@@ -35,7 +35,10 @@ pyupgrade = "^2.29.1"
 nox = "^2021.10.1"
 jake = "^1.4.5"
 bandit = "^1.7.1"
-adr-tools-python = "^1.0.3"
+mkdocs-material = "^8.2.2"
+pyadr = "^0.18.0"
+wheel = "^0.37.1"
+setuptools = "^60.9.3"
 
 [tool.poetry.scripts]
 cal-opt = "cal_opt.__main__:cli"

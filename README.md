@@ -4,6 +4,8 @@ Optimising calendar leave
 
 ## Contributing
 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
+
 ### Setup
 
 Download a local copy of [sample iCalendar file](https://www.officeholidays.com/ics-clean/australia/queensland).

@@ -53,3 +53,8 @@ repos:
     rev: v1.2.4
     hooks:
       - id: python-safety-dependencies-check
+  - repo: https://github.com/arichtman/pyadr
+    rev: feat-pre-commit-hooks
+    hooks:
+      - id: generate-toc
+      - id: check-adr

@@ -21,7 +21,7 @@ def cli(calendar_file, debug) -> None:
         logger.debug(calendar_file)
         from pprint import pprint
 
-        env = {key: val for key, val in os.environ.items() if key.startswith("FXO")}
+        env = {key: val for key, val in os.environ.items() if key.startswith("CO")}
         pprint(env)
 
     else:
