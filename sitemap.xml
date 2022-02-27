@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+     <loc>https://github.com/arichtman/cal-opt/</loc>
+     <lastmod>2022-02-27</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://github.com/arichtman/cal-opt/adr/</loc>
+     <lastmod>2022-02-27</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://github.com/arichtman/cal-opt/adr/0000-record-architecture-decisions/</loc>
+     <lastmod>2022-02-27</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://github.com/arichtman/cal-opt/adr/0001-use-markdown-architectural-decision-records/</loc>
+     <lastmod>2022-02-27</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://github.com/arichtman/cal-opt/adr/template/</loc>
+     <lastmod>2022-02-27</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+</urlset>
