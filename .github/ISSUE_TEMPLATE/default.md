@@ -1,5 +1,5 @@
 - cal-opt version:
-- Python version:
+- Rust version:
 - Operating System:
 
 ### Description

@@ -1,28 +1,25 @@
 # cal-opt
 
-Optimising calendar leave
+Optimising calendar leave so you can be where you wanna be.
 
-## Contributing
+** WORK IN PROGRESS, DOES NOT REFLECT FINAL PRODUCT. NOT YET FIT FOR USE IN ANY WAY, SHAPE, OR FORM. ZERO WARRANTY IMPLIED, ZERO LIABILITY ASSUMED**
 
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
+## Outline
 
-### Setup
+Seems like every year someone puts out a calendar "hack" that shows how to get the best time off work.
+Of course, there are issues with this:
 
-Download a local copy of [sample iCalendar file](https://www.officeholidays.com/ics-clean/australia/queensland).
+- It circulates at the same time to everyone
+- It's immediately stale
+- It can't account for individual (or even regional) differences
+- There's usually only one edition
+- It's often only published annually
 
-Using Ubuntu with PPA DeadSnakes
+So why not make our own, on-demand, and customised.
+While we're at it, let's just make the top 10 options so we have a lil choice, ey?
 
-```Bash
-sudo apt install -y python3.11-distutils python3.11
+The end aim is that you input your time frame, existing holidays, leave amount, and (optionally) biases, and it generates the top N optimal leave distributions to maximimise holidays.
 
-poetry env use $(which python3.11)
-poetry install
-poetry shell
-pre-commit install
+## Where we're at
 
-cal-opt sample.ics
-```
-
-When using VSCode, set your interpreter to `poetry env info --path`, this'll allow linting and IDE tools to use the Poetry environment.
-
-If you get `int object is not callable` when running `jake` it's [known issue](https://github.com/sonatype-nexus-community/jake/issues/100), fix with `jake ddt --clear-cache`
+I have Rust, and a dream.
