@@ -1,4 +1,7 @@
+*.ics
 public/
+result/
+.direnv/
 
 # Created by https://www.toptal.com/developers/gitignore/api/rust,windows,linux,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=rust,windows,linux,macos

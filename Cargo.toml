@@ -1,9 +1,38 @@
 [package]
-name = "cal-opt"
+name = "icalendar-leave-optimiser"
 version = "0.1.0"
 edition = "2021"
+authors = [ "Ariel Richtman <ariel@richtman.com.au>" ]
+description = "Calendar optimiser"
+documentation = "https://icalendar-leave-optimiser.richtman.com.au/docs"
+homepage = "https://icalendar-leave-optimiser.richtman.com.au"
+repository = "https://github.com/arichtman/icalendar-leave-optimiser"
+license = "GPL-3.0-or-later"
+readme = "README.md"
+publish = false
+rust-version = "1.66.0"
+keywords = ["calendar", "leave", "holiday", "optimization"]
+categories = [
+    "command-line-utilities"
+]
 
 [dependencies]
+chrono = "0.4.*"
+time = "0.3.*"
+log = "0.4.17"
+simple_logger = "3.0.0"
 
 [dev-dependencies]
 rusty-hook = "0.11.2"
+
+[dependencies.clap]
+version = "4.0.*"
+features = ["derive"]
+
+[dependencies.icalendar]
+version = "0.13.*"
+features = ["parser"]
+
+[[bin]]
+name = "icalendar-leave-optimiser"
+path = "src/main.rs"

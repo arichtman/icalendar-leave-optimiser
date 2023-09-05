@@ -1,4 +1,4 @@
-- cal-opt version:
+- icalendar-leave-optimiser version:
 - Rust version:
 - Operating System:
 

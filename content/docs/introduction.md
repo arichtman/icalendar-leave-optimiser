@@ -1,6 +1,6 @@
 +++
 title = "Introduction"
-description = "Cal-Opt: Getting you where you want to be."
+description = "icalendar-leave-optimiser: Getting you where you want to be."
 date = 2021-05-01T08:00:00+00:00
 updated = 2021-05-01T08:00:00+00:00
 draft = false
@@ -9,7 +9,7 @@ sort_by = "weight"
 template = "docs/page.html"
 
 [extra]
-lead = "Cal-Opt is an application to optimise leave usage to provide maximum value."
+lead = "icalendar-leave-optimiser is an application to optimise leave usage to provide maximum value."
 toc = true
 top = false
 +++

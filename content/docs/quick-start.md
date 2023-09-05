@@ -9,12 +9,12 @@ sort_by = "weight"
 template = "docs/page.html"
 
 [extra]
-lead = "One page summary of how to get what you want out of Cal-Opt."
+lead = "One page summary of how to get what you want out of icalendar-leave-optimiser."
 # toc = true
 # top = false
 +++
 
 
 ```Bash
-cargo install cal-opt
+cargo install icalendar-leave-optimiser
 ```

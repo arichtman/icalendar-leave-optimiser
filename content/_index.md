@@ -1,5 +1,5 @@
 +++
-title = "Cal-Opt"
+title = "icalendar-leave-optimiser"
 
 
 # The homepage contents
@@ -9,7 +9,7 @@ url = "/docs/introduction/"
 url_button = "Get started"
 repo_version = ""
 repo_license = "GNU GPL v3 License."
-repo_url = "https://github.com/arichtman/cal-opt"
+repo_url = "https://github.com/arichtman/icalendar-leave-optimiser"
 
 # Menu items
 [[extra.menu.social]]

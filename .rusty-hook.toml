@@ -1,5 +1,5 @@
 [hooks]
-pre-commit = "cargo test && cargo fmt"
+pre-commit = "cargo fmt && cargo test && git add -u"
 
 [logging]
 verbose = true

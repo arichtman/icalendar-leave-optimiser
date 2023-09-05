@@ -1,6 +1,6 @@
 # The URL the site will be built for
-base_url = "https://cal-opt.richtman.com.au"
-title = "cal-opt"
+base_url = "https://icalendar-leave-optimiser.richtman.com.au"
+title = "icalendar-leave-optimiser"
 description = "Getting you where you want to be."
 render_emoji = true
 external_links_target_blank = true
@@ -50,7 +50,7 @@ timezone = "UTC"
 
 # Edit page on reposity or not
 edit_page = true
-docs_repo = "https://github.com/arichtman/cal-opt"
+docs_repo = "https://github.com/arichtman/icalendar-leave-optimiser"
 repo_branch = "main"
 
 [[extra.menu.social]]
