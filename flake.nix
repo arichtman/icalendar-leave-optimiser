@@ -2,7 +2,7 @@
   description = "A Nix-flake-based Rust development environment";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-22.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-24.05";
     flake-utils.url = "github:numtide/flake-utils";
     rust-overlay.url = "github:oxalica/rust-overlay";
   };
@@ -18,26 +18,14 @@
     let
       overlays = [
         (import rust-overlay)
-        (self: super: {
-          rustToolchain =
-            let
-              rust = super.rust-bin;
-            in
-            if builtins.pathExists ./rust-toolchain.toml then
-              rust.fromRustupToolchainFile ./rust-toolchain.toml
-            else if builtins.pathExists ./rust-toolchain then
-              rust.fromRustupToolchainFile ./rust-toolchain
-            else
-              rust.stable.latest.default;
-        })
       ];
 
       pkgs = import nixpkgs { inherit system overlays; };
     in
     {
-      devShells.default = pkgs.mkShell {
-        packages = with pkgs; [
-          rustToolchain
+      devShells.default = with pkgs; mkShell {
+        buildInputs = [
+          rust-bin.stable.latest.default
           openssl
           pkg-config
           cargo-deny
