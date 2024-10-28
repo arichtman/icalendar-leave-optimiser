@@ -24,18 +24,14 @@ fn main() {
     };
     simple_logger::init_with_level(log_level).expect("Error initialising logging, aborting.");
 
-    debug!("{:#?}", cli);
-    let _ = cal_opt(cli.file, cli.duration);
+    debug!("{cli:#?}");
+    let cal_opt = cal_opt(cli.file, cli.duration);
+    debug!("{cal_opt:#?}");
 }
 
-// https://docs.rs/clap/latest/clap/_derive/_tutorial/index.html
 #[derive(Parser, Debug)]
 #[command(name = "icalendar-leave-optimiser", author, version, about, long_about = None)] // Read from `Cargo.toml`
 struct Cli {
-    // TODO: Stretch goal to take config from file
-    // Sets a custom config file
-    // #[arg(short, long, value_name = "FILE")]
-    // config: Option<PathBuf>,
     /// Increments logging verbosity. May be applied multiple times.
     #[arg(short, long, action = clap::ArgAction::Count)]
     verbose: u8,
