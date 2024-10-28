@@ -24,12 +24,6 @@ The end aim is that you input your time frame, existing holidays, leave amount, 
 
 I have Rust, and a dream.
 
-## Developing
-
-I recommend VSCode + Nix. Install extensions `arrterian.nix-env-selector` and `rust-lang.rust-analyzer` and you should be good to go.
-If you like, VSCode + Devcontainers is also available.
-`cargo run -- --help`
-
 ## Notes
 
 - Library in use does not support vJournal entries
@@ -37,4 +31,4 @@ If you like, VSCode + Devcontainers is also available.
 
 ## References
 
-- https://public-holidays.dteoh.com/
+- [Australian public holiday calendars](https://public-holidays.dteoh.com/)

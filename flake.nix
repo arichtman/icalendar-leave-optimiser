@@ -46,10 +46,6 @@
           rust-analyzer
           zola
         ];
-
-        shellHook = ''
-          ${pkgs.rustToolchain}/bin/cargo --version
-        '';
       };
     });
 }
