@@ -1,6 +1,6 @@
 #![allow(dead_code, unused_imports, unused_variables, unreachable_code)]
 
-use chrono::{Date, Duration, NaiveDate, Utc};
+use chrono::{Duration, NaiveDate, Utc};
 
 extern crate clap;
 use clap::{arg, command, Arg, ArgGroup, Parser};
