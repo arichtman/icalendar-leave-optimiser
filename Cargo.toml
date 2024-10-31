@@ -10,7 +10,6 @@ repository = "https://github.com/arichtman/icalendar-leave-optimiser"
 license = "GPL-3.0-or-later"
 readme = "README.md"
 publish = false
-# rust-version = "1.66.0"
 keywords = ["calendar", "leave", "holiday", "optimization"]
 categories = [
     "command-line-utilities"

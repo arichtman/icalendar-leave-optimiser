@@ -1,10 +1,13 @@
 #![allow(dead_code, unused_imports, unused_variables, unreachable_code)]
 
 use chrono::{Duration, NaiveDate, Utc};
+use std::fs::File;
+use std::io::prelude::*;
 
 extern crate clap;
 use clap::{arg, command, Arg, ArgGroup, Parser};
 
+use icalendar::{Calendar, CalendarComponent, Component, DatePerhapsTime, Event};
 use log::{debug, error, info, warn};
 
 use std::fs;
@@ -12,9 +15,11 @@ use std::path::PathBuf;
 
 // TODO: Review modules, imports, structure. Potentially add back in library definition to Cargo.toml
 mod cal_opt;
+mod math_cal;
+use self::math_cal::*;
 use crate::cal_opt::cal_opt;
 
-fn main() {
+fn main() -> std::io::Result<()> {
     let cli = Cli::parse();
     let log_level = match cli.verbose {
         0 => log::Level::Error,
@@ -27,6 +32,33 @@ fn main() {
     debug!("{cli:#?}");
     let cal_opt = cal_opt(cli.file, cli.duration);
     debug!("{cal_opt:#?}");
+    let _ = make_math_calendar(&cal_opt);
+
+    /*
+    Working backwards, we want a fully populated Calendar object, so we can serialize it to disk.
+    Is this even possible?
+    Let's construct one manually...
+    */
+    let mut test_output_cal = Calendar::new();
+    let cal_event = Event::new()
+        .status(icalendar::EventStatus::Confirmed)
+        .starts(DatePerhapsTime::Date(
+            NaiveDate::from_yo_opt(2024, 1).unwrap(),
+        ))
+        .ends(DatePerhapsTime::Date(
+            NaiveDate::from_yo_opt(2024, 5).unwrap(),
+        ))
+        .summary("my event")
+        .done();
+    let cal_comp = CalendarComponent::Event(cal_event);
+    test_output_cal.push(cal_comp);
+    test_output_cal.print().unwrap();
+    let mut file = File::create("foo.txt")?;
+    // This requires nightly...
+    // file.write_all(test_output_cal.as_bytes())?;
+    file.write_all(&format!("{test_output_cal}").into_bytes())
+        .unwrap();
+    Ok(())
 }
 
 #[derive(Parser, Debug)]
@@ -62,3 +94,5 @@ Argument behaviour matrix:
 | 1 | 1 | 1 | If duration mismatch, error, else continue
 
 */
+#[cfg(test)]
+mod tests;
