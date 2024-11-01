@@ -24,6 +24,12 @@ The end aim is that you input your time frame, existing holidays, leave amount, 
 
 I have Rust, and a dream.
 
+## Todo
+
+- Review modules, imports, structure. Potentially add back in library definition to Cargo.toml
+- Allow multiple input calendars
+- Enhance argument validation
+
 ## Notes
 
 - Library in use does not support vJournal entries
@@ -63,6 +69,24 @@ We can add some whole-of-array scoring using a superlinear factor based on somet
 
 Implementation note: I'd like this to be the strategy pattern, so it's easily and clearly swappable.
 Mega-stretch goal is a plugin system using WASM.
+
+
+I was hoping to use argument relations to narrow the api but most inputs we can work with.
+Ze question is, do we want to?
+I think for now we'll stick to duration only and assume today.
+We can work on input date validation and argument grouping later
+
+Argument behaviour matrix:
+
+| start | end | duration | Behaviour
+| 0 | 0 | 0 | Default to today + 365
+| 0 | 0 | 1 | Default to today + duration
+| 0 | 1 | 0 | Default to today until end
+| 0 | 1 | 1 | Set start to end minus duration?
+| 1 | 0 | 0 | Invalid? Default to start + 365?
+| 1 | 0 | 1 | Set to start + duration
+| 1 | 1 | 0 | Set to start + end
+| 1 | 1 | 1 | If duration mismatch, error, else continue
 
 ## References
 

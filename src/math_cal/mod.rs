@@ -2,7 +2,6 @@ use core::panic;
 
 use chrono::NaiveDate;
 use icalendar::Calendar;
-use log::{debug, error, info, warn};
 
 #[derive(Clone, Debug)]
 pub struct MathDate {
