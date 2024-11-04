@@ -8,7 +8,7 @@ extern crate clap;
 use clap::{arg, command, Parser};
 
 use icalendar::{Calendar, CalendarComponent, Component, DatePerhapsTime, Event};
-use log::debug;
+use log::{debug, info};
 
 use std::path::PathBuf;
 
@@ -16,6 +16,8 @@ mod cal_opt;
 mod math_cal;
 use self::math_cal::*;
 use crate::cal_opt::cal_opt;
+
+use rand::Rng;
 
 fn main() -> std::io::Result<()> {
     let cli = Cli::parse();
@@ -32,6 +34,14 @@ fn main() -> std::io::Result<()> {
     debug!("{cal_opt:#?}");
     let _ = make_math_calendar(&cal_opt);
 
+    // Testing using a mutable reference slice to avoid heap allocation with vec
+    let mut rng = rand::thread_rng();
+    let length = rng.gen_range(1..10);
+    let mut static_array = [0 as u8; 20];
+    let array_ref = &mut static_array[..=length];
+    array_ref[1] = 5;
+    info!("{:?}", array_ref);
+    info!("{:?}", &static_array[..=10]);
     create_and_write_demo_calendar()?;
     Ok(())
 }
