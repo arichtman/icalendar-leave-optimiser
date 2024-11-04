@@ -1,4 +1,10 @@
-#![allow(dead_code, unused_imports, unused_variables, unreachable_code)]
+#![allow(
+    dead_code,
+    unused_imports,
+    unused_variables,
+    unreachable_code,
+    unused_mut
+)]
 
 use chrono::NaiveDate;
 use std::fs::File;
@@ -7,7 +13,7 @@ use std::io::prelude::*;
 extern crate clap;
 use clap::{arg, command, Parser};
 
-use icalendar::{Calendar, CalendarComponent, Component, DatePerhapsTime, Event};
+use icalendar::{Calendar, CalendarComponent, Component, DatePerhapsTime, Event, EventLike};
 use log::{debug, info};
 
 use std::path::PathBuf;
@@ -34,14 +40,47 @@ fn main() -> std::io::Result<()> {
     debug!("{cal_opt:#?}");
     let _ = make_math_calendar(&cal_opt);
 
-    // Testing using a mutable reference slice to avoid heap allocation with vec
-    let mut rng = rand::thread_rng();
-    let length = rng.gen_range(1..10);
-    let mut static_array = [0 as u8; 20];
-    let array_ref = &mut static_array[..=length];
-    array_ref[1] = 5;
-    info!("{:?}", array_ref);
-    info!("{:?}", &static_array[..=10]);
+    let mut demo_month = [
+        false, false, false, false, false, true, true, false, false, false, false, false, true,
+        true, false, false, false, false, false, true, true, false, false, false, false, false,
+        true, true, false, false, false,
+    ];
+    fn calculate_skew(state: &[bool]) -> f32 {
+        4.0
+    }
+    fn calculate_contiguous(state: &[bool]) -> f32 {
+        2.0
+    }
+    fn calculate_fitness(skew: f32, sw: f32, contiguous_value: f32, cw: f32) -> u32 {
+        // This is a rubish formula to illustrate the different ways of applying our aspects
+        const FORM_CONST: u32 = 50;
+        (contiguous_value.powf(cw) + (skew * sw) + FORM_CONST as f32) as u32
+    }
+    fn assess_fitness(state: &[bool]) -> i32 {
+        let skew_value = calculate_skew(state);
+        let contiguous_value = calculate_contiguous(state);
+        const CONTIGUOUS_WEIGHT: f32 = 1.0;
+        const SKEW_WEIGHT: f32 = 1.0;
+        calculate_fitness(skew_value, SKEW_WEIGHT, contiguous_value, CONTIGUOUS_WEIGHT)
+            .try_into()
+            .unwrap()
+    }
+    fn select_next_state(state: &[bool]) -> Vec<bool> {
+        let original_fitness_score = assess_fitness(&state);
+        let next_allocation = select_next_allocation(&state);
+        let mut next_state: Vec<bool> = state.into();
+        next_state[next_allocation] = true;
+        next_state.into()
+    }
+    fn select_next_allocation(state: &[bool]) -> usize {
+        // Dumb implementation that's random
+        let mut rng = rand::thread_rng();
+        rng.gen_range(0..state.len())
+    }
+    let current_state = demo_month;
+    for days_allocated in 0..5 {
+        let current_state = select_next_state(&current_state);
+    }
     create_and_write_demo_calendar()?;
     Ok(())
 }
@@ -60,8 +99,6 @@ struct Cli {
     duration: u32,
 }
 
-#[cfg(test)]
-mod tests;
 fn create_and_write_demo_calendar() -> Result<(), std::io::Error> {
     /*
     Working backwards, we want a fully populated Calendar object, so we can serialize it to disk.
@@ -85,3 +122,6 @@ fn create_and_write_demo_calendar() -> Result<(), std::io::Error> {
     file.write_all(&format!("{test_output_cal}").into_bytes())?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests;

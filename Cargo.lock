@@ -34,9 +34,9 @@ dependencies = [
 
 [[package]]
 name = "anstyle"
-version = "1.0.9"
+version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8365de52b16c035ff4fcafe0092ba9390540e3e352870ac09933bebcaa2c8c56"
+checksum = "55cc3b69f167a1ef2e161439aa98aed94e6028e5f9a59be9a6ffb47aef1651f9"
 
 [[package]]
 name = "anstyle-parse"
@@ -86,9 +86,9 @@ checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
 
 [[package]]
 name = "cc"
-version = "1.1.31"
+version = "1.1.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2e7962b54006dcfcc61cb72735f4d89bb97061dd6a7ed882ec6b8ee53714c6f"
+checksum = "67b9470d453346108f93a59222a9a1a5724db32d0a4727b7ab7ace4b4d822dc9"
 dependencies = [
  "shlex",
 ]
@@ -191,8 +191,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c4567c8db10ae91089c99af84c68c38da3ec2f087c3f82960bcdbf3656b6f4d7"
 dependencies = [
  "cfg-if",
+ "js-sys",
  "libc",
  "wasi",
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -226,11 +228,12 @@ dependencies = [
 
 [[package]]
 name = "icalendar"
-version = "0.13.3"
+version = "0.16.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "95f667625399cbff40e24172d0b3dae49ff51db305bee0facd67063b1fbdc15e"
+checksum = "ade2740e54a5de285fcc5eb7f97c75b4fb8842d807f62ecbbe716006676d6181"
 dependencies = [
  "chrono",
+ "iso8601",
  "nom",
  "uuid",
 ]
@@ -253,6 +256,15 @@ name = "is_terminal_polyfill"
 version = "1.70.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7943c866cc5cd64cbc25b2e01621d07fa8eb2a1a23160ee81ce38704e97b8ecf"
+
+[[package]]
+name = "iso8601"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "924e5d73ea28f59011fec52a0d12185d496a9b075d360657aed2a5707f701153"
+dependencies = [
+ "nom",
+]
 
 [[package]]
 name = "itoa"
@@ -448,9 +460,9 @@ checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 
 [[package]]
 name = "syn"
-version = "2.0.85"
+version = "2.0.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5023162dfcd14ef8f32034d8bcd4cc5ddc61ef7a247c024a33e24e1f24d21b56"
+checksum = "25aa4ce346d03a6dcd68dd8b4010bcb74e54e62c90c573f394c46eae99aba32d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -509,6 +521,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8c5f0a0af699448548ad1a2fbf920fb4bee257eae39953ba95cb84891a0446a"
 dependencies = [
  "getrandom",
+ "wasm-bindgen",
 ]
 
 [[package]]
