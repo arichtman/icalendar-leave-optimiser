@@ -12,6 +12,51 @@ struct InterimCalendar {
     dates: Vec<(NaiveDate, bool)>,
 }
 
+struct SimplifiedEvent {
+    start: NaiveDate,
+    end: NaiveDate,
+    summary: String,
+}
+
+impl From<Event> for SimplifiedEvent {
+    fn from(value: Event) -> Self {
+        todo!()
+    }
+}
+
+// Q: Is this bad practice? Doing type conversion from reference to owned.
+impl TryFrom<&Event> for SimplifiedEvent {
+    type Error = &'static str;
+    fn try_from(value: &Event) -> Result<Self, Self::Error> {
+        // Require at least summary text
+        let summary = value.get_summary().unwrap_or_default();
+        if summary.is_empty() {
+            return Err("No summary");
+        }
+
+        // Chronological checks
+        let start = value.get_start();
+        let end = value.get_end();
+        // Need both start and end to process
+        if start.is_none() | end.is_none() {
+            return Err("Missing either start or end");
+        }
+
+        // Remove time granularity
+        let start = start.unwrap().naive_date();
+        let end = end.unwrap().naive_date();
+        // On the odd chance the event is reversed
+        if start > end {
+            let (start, end) = (end, start);
+        }
+        Ok(SimplifiedEvent {
+            start,
+            end,
+            summary: summary.to_string(),
+        })
+    }
+}
+
 impl InterimCalendar {
     fn new(initial_date: NaiveDate, duration: u64) -> InterimCalendar {
         let dates = (0..=duration)
@@ -27,41 +72,42 @@ impl InterimCalendar {
         InterimCalendar { dates }
     }
     fn populate_holidays(self: &mut Self, cal: &Calendar) {
-        // Pull Event references out from Calendar
+        // Pull references out from Calendar, drop non-Events and any unsuitable events
+        let events = cal
+            .components
+            .iter()
+            // Gather events only
+            .filter_map(|cc| cc.as_event())
+            // Convert to simplified events and drop any errors
+            // Q: swallowing errors here smells, what ought I be doing?
+            .filter_map(|e| SimplifiedEvent::try_from(e).ok())
+            .collect::<Vec<_>>();
         let input_events = cal
             .components
             .iter()
-            .map(|cc| cc.as_event())
+            .filter_map(|cc| cc.as_event())
+            // .filter(|&e| Self::test_event_validity(e))
+            .filter(&Self::test_event_validity)
             .collect::<Vec<_>>();
         debug!("{input_events:?}");
-        // for input_event in input_events.iter().filter(|e| e.is_some()) {
-        //     InterimCalendar::test_event_validity(input_event.unwrap());
-        // }
-        let valid_events: Vec<_> = input_events
-            .iter()
-            .filter(|e| InterimCalendar::test_event_validity(**e))
-            .map(|e| e.unwrap())
-            .collect();
-        debug!("{valid_events:?}");
-        for event in valid_events {
-            event.get_start().unwrap().naive_date() >= event.get_end().unwrap().naive_date();
+        let foo: SimplifiedEvent = input_events[0].try_into().unwrap();
+        for event in input_events {
+            ()
         }
         ()
     }
-    fn test_event_validity(untested_event: Option<&Event>) -> bool {
-        // Bail if None
-        let Some(existing_event) = untested_event else {
-            return false;
-        };
+
+    // TODO: double reference smells, but why?
+    fn test_event_validity(untested_event: &&Event) -> bool {
         // Require at least summary text
-        let summary = existing_event.get_summary().unwrap_or_default();
+        let summary = untested_event.get_summary().unwrap_or_default();
         if summary.is_empty() {
             return false;
         }
 
         // Chronological checks
-        let start = existing_event.get_start();
-        let end = existing_event.get_end();
+        let start = untested_event.get_start();
+        let end = untested_event.get_end();
         // Need both start and end to process
         if start.is_none() | end.is_none() {
             return false;
