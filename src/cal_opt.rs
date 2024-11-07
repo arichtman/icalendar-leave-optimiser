@@ -1,14 +1,13 @@
-
-use icalendar::{
-    Calendar, CalendarComponent, Component,
-};
+use icalendar::{Calendar, CalendarComponent, Component};
 use log::{debug, info};
 use std::fs;
 use std::path::PathBuf;
 
-
-mod traits;
-use crate::cal_opt::traits::AsNaiveDate;
+use chrono::NaiveDate;
+use icalendar::{
+    CalendarDateTime, CalendarDateTime::Floating, CalendarDateTime::WithTimezone, DatePerhapsTime,
+    DatePerhapsTime::Date as iCalDate, DatePerhapsTime::DateTime as iCalDateTime,
+};
 
 pub fn cal_opt(input_file_paths: Vec<PathBuf>, duration: u32) -> Result<Calendar, std::io::Error> {
     let file_path = &input_file_paths[0];
@@ -61,4 +60,19 @@ pub fn cal_opt(input_file_paths: Vec<PathBuf>, duration: u32) -> Result<Calendar
         debug!("{:?}", event)
     }
     Ok(cal)
+}
+
+pub trait AsNaiveDate {
+    fn naive_date(self) -> NaiveDate;
+}
+
+impl AsNaiveDate for DatePerhapsTime {
+    fn naive_date(self) -> NaiveDate {
+        match self {
+            iCalDate(date) => date,
+            iCalDateTime(Floating(date_time)) => date_time.date(),
+            iCalDateTime(CalendarDateTime::Utc(date_time)) => date_time.date_naive(),
+            iCalDateTime(WithTimezone { date_time, tzid: _ }) => date_time.date(),
+        }
+    }
 }

@@ -1,7 +1,40 @@
+use chrono::Days;
 use core::panic;
 
 use chrono::NaiveDate;
-use icalendar::Calendar;
+use icalendar::CalendarComponent;
+use icalendar::{Calendar, Event};
+
+struct InterimCalendar {
+    dates: Vec<(NaiveDate, bool)>,
+}
+
+impl InterimCalendar {
+    fn new(initial_date: NaiveDate, duration: u64) -> InterimCalendar {
+        let dates = (0..=duration)
+            .into_iter()
+            .enumerate()
+            .map(|(index, offset)| {
+                (
+                    initial_date.checked_add_days(Days::new(offset)).unwrap(),
+                    false,
+                )
+            })
+            .collect();
+        InterimCalendar { dates }
+    }
+    fn populate_holidays(self: &Self, cal: &Calendar) {
+        let input_events = cal
+            .components
+            .iter()
+            .filter_map(|cc| match cc {
+                icalendar::CalendarComponent::Event(_) => Some(cc.as_event()),
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+        ()
+    }
+}
 
 #[derive(Clone, Debug)]
 pub struct MathDate {
