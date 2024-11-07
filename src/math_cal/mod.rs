@@ -1,9 +1,12 @@
 use chrono::Days;
 use core::panic;
+use log::debug;
 
 use chrono::NaiveDate;
-use icalendar::CalendarComponent;
-use icalendar::{Calendar, Event};
+use icalendar::{Calendar, CalendarDateTime, DatePerhapsTime, Event};
+use icalendar::{CalendarComponent, Component};
+
+use crate::cal_opt::AsNaiveDate;
 
 struct InterimCalendar {
     dates: Vec<(NaiveDate, bool)>,
@@ -23,16 +26,55 @@ impl InterimCalendar {
             .collect();
         InterimCalendar { dates }
     }
-    fn populate_holidays(self: &Self, cal: &Calendar) {
+    fn populate_holidays(self: &mut Self, cal: &Calendar) {
+        // Pull Event references out from Calendar
         let input_events = cal
             .components
             .iter()
-            .filter_map(|cc| match cc {
-                icalendar::CalendarComponent::Event(_) => Some(cc.as_event()),
-                _ => None,
-            })
+            .map(|cc| cc.as_event())
             .collect::<Vec<_>>();
+        debug!("{input_events:?}");
+        // for input_event in input_events.iter().filter(|e| e.is_some()) {
+        //     InterimCalendar::test_event_validity(input_event.unwrap());
+        // }
+        let valid_events: Vec<_> = input_events
+            .iter()
+            .filter(|e| InterimCalendar::test_event_validity(**e))
+            .map(|e| e.unwrap())
+            .collect();
+        debug!("{valid_events:?}");
+        for event in valid_events {
+            event.get_start().unwrap().naive_date() >= event.get_end().unwrap().naive_date();
+        }
         ()
+    }
+    fn test_event_validity(untested_event: Option<&Event>) -> bool {
+        // Bail if None
+        let Some(existing_event) = untested_event else {
+            return false;
+        };
+        // Require at least summary text
+        let summary = existing_event.get_summary().unwrap_or_default();
+        if summary.is_empty() {
+            return false;
+        }
+
+        // Chronological checks
+        let start = existing_event.get_start();
+        let end = existing_event.get_end();
+        // Need both start and end to process
+        if start.is_none() | end.is_none() {
+            return false;
+        }
+
+        // Remove time granularity
+        let start = start.unwrap().naive_date();
+        let end = end.unwrap().naive_date();
+        // On the odd chance the event is reversed
+        if start > end {
+            let (start, end) = (end, start);
+        }
+        true
     }
 }
 
