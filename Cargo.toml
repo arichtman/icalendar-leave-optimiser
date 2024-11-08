@@ -29,6 +29,8 @@ features = ["derive"]
 
 [dependencies.icalendar]
 version = "^0.16.9"
+# git = "https://github.com/arichtman/icalendar-rs.git"
+# branch = "naivedate-conversion"
 features = ["parser"]
 
 [[bin]]
