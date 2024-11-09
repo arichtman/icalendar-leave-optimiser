@@ -12,6 +12,7 @@ struct InterimCalendar {
     dates: Vec<(NaiveDate, bool)>,
 }
 
+#[derive(Debug)]
 struct SimplifiedEvent {
     start: NaiveDate,
     end: NaiveDate,
@@ -24,27 +25,30 @@ impl From<Event> for SimplifiedEvent {
     }
 }
 
+// TODO: impl Error trait and add messages?
+#[derive(Debug)]
+enum EventConversionError {
+    MissingSummary,
+    MissingBoundary,
+}
+
 // Q: Is this bad practice? Doing type conversion from reference to owned.
 impl TryFrom<&Event> for SimplifiedEvent {
-    type Error = &'static str;
+    type Error = EventConversionError;
     fn try_from(value: &Event) -> Result<Self, Self::Error> {
         // Require at least summary text
         let summary = value.get_summary().unwrap_or_default();
         if summary.is_empty() {
-            return Err("No summary");
+            return Err(EventConversionError::MissingSummary);
         }
-
-        // Chronological checks
-        let start = value.get_start();
-        let end = value.get_end();
-        // Need both start and end to process
-        if start.is_none() | end.is_none() {
-            return Err("Missing either start or end");
-        }
+        // Chronological checks need both start and end to process
+        let (Some(start), Some(end)) = (value.get_start(), value.get_end()) else {
+            return Err(EventConversionError::MissingBoundary);
+        };
 
         // Remove time granularity
-        let start = start.unwrap().naive_date();
-        let end = end.unwrap().naive_date();
+        let start = start.naive_date();
+        let end = end.naive_date();
         // On the odd chance the event is reversed
         if start > end {
             let (start, end) = (end, start);
@@ -86,41 +90,14 @@ impl InterimCalendar {
             .components
             .iter()
             .filter_map(|cc| cc.as_event())
-            // .filter(|&e| Self::test_event_validity(e))
-            .filter(&Self::test_event_validity)
+            // Q: What's the correct error handling here?
+            .filter_map(|e| SimplifiedEvent::try_from(e).ok())
             .collect::<Vec<_>>();
         debug!("{input_events:?}");
-        let foo: SimplifiedEvent = input_events[0].try_into().unwrap();
         for event in input_events {
             ()
         }
         ()
-    }
-
-    // TODO: double reference smells, but why?
-    fn test_event_validity(untested_event: &&Event) -> bool {
-        // Require at least summary text
-        let summary = untested_event.get_summary().unwrap_or_default();
-        if summary.is_empty() {
-            return false;
-        }
-
-        // Chronological checks
-        let start = untested_event.get_start();
-        let end = untested_event.get_end();
-        // Need both start and end to process
-        if start.is_none() | end.is_none() {
-            return false;
-        }
-
-        // Remove time granularity
-        let start = start.unwrap().naive_date();
-        let end = end.unwrap().naive_date();
-        // On the odd chance the event is reversed
-        if start > end {
-            let (start, end) = (end, start);
-        }
-        true
     }
 }
 
