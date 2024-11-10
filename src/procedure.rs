@@ -1,3 +1,4 @@
+use crate::Result;
 use chrono::Datelike;
 use icalendar::Calendar;
 use log::{debug, info};
@@ -10,14 +11,11 @@ use chrono::NaiveDate;
 use chrono::Utc;
 
 #[derive(Debug, thiserror::Error)]
-pub enum CalOptProcessError {
+pub enum Error {
     #[error("Something went wrong in-process")]
     GenericError,
 }
-pub fn do_procedure(
-    holiday_input_calendar: Calendar,
-    duration: u64,
-) -> Result<Calendar, CalOptProcessError> {
+pub fn do_procedure(holiday_input_calendar: Calendar, duration: u64) -> Result<Calendar> {
     let now = Utc::now();
     let now = NaiveDate::from_num_days_from_ce_opt(now.num_days_from_ce()).unwrap();
     let initial_calendar = InitializedCalendar::new(now, duration);

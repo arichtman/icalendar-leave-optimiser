@@ -6,8 +6,16 @@
     unused_mut
 )]
 
+mod data_transforms;
+mod demo;
+mod error;
+mod logic;
+mod procedure;
+
+pub use self::error::{Error, Result};
+
 use demo::create_and_write_demo_calendar;
-use procedure::{do_procedure, CalOptProcessError};
+use procedure::do_procedure;
 
 extern crate clap;
 use clap::{arg, command, Parser};
@@ -18,24 +26,7 @@ use log::debug;
 use std::fs;
 use std::path::PathBuf;
 
-mod data_transforms;
-mod demo;
-mod logic;
-mod procedure;
-
-#[derive(Debug, thiserror::Error)]
-pub enum CalOptError {
-    #[error("Something went wrong")]
-    GenericError,
-    #[error("File reading error")]
-    FileError(#[from] std::io::Error),
-    #[error("Failed to parse calendar")]
-    ParsingError(String),
-    #[error("Failure in procedure")]
-    ProcedureError(#[from] CalOptProcessError),
-}
-
-fn main() -> Result<(), CalOptError> {
+fn main() -> Result<()> {
     let cli = Cli::parse();
     debug!("{cli:#?}");
     let log_level = match cli.verbose {
@@ -53,14 +44,14 @@ fn main() -> Result<(), CalOptError> {
     create_and_write_demo_calendar()?;
     Ok(())
 }
-pub fn collate_files(input_file_paths: Vec<PathBuf>) -> Result<Calendar, CalOptError> {
+pub fn collate_files(input_file_paths: Vec<PathBuf>) -> Result<Calendar> {
     let file_path = &input_file_paths[0];
     let file_contents = fs::read_to_string(file_path)?;
     // TODO: Check up error handling practices,
     //  there should be a nicer way to do this
     match file_contents.parse::<Calendar>() {
         Ok(cal) => Ok(cal),
-        Err(em) => Err(CalOptError::ParsingError(em)),
+        Err(em) => Err(Error::ParsingError(em)),
     }
 }
 

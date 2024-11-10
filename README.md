@@ -91,3 +91,5 @@ Argument behaviour matrix:
 ## References
 
 - [Australian public holiday calendars](https://public-holidays.dteoh.com/)
+- [Jeremy Chone's error handling](https://youtu.be/j-VQCYP7wyw?si=GiA-L4bEw4mnG6kl)
+- [Repo of JC's error handling](https://github.com/randallard/rust10x-error-handling)

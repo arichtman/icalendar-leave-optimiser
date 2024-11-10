@@ -23,6 +23,7 @@ log = "^0.4.22"
 simple_logger = "^5.0.0"
 rand = "^0.8.5"
 thiserror = "2.0.1"
+derive_more = { version = "1.0.0", features = ["display", "from"] }
 
 [dependencies.clap]
 version = "^4.5.20"
