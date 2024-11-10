@@ -2,6 +2,7 @@ use super::init_cal::InitializedCalendar;
 use super::simp_event::SimplifiedEvent;
 use crate::Calendar;
 use chrono::NaiveDate;
+use icalendar::CalendarComponent;
 use log::debug;
 use std::collections::HashMap;
 
@@ -10,20 +11,28 @@ pub struct HolidayedCalendar {
     dates: HashMap<NaiveDate, (String, bool)>,
 }
 
-impl HolidayedCalendar {
-    // Q: What determines if my function should take references or ownership? Lifetime?
-    pub fn new(cal: InitializedCalendar, holidays: &Calendar) -> Self {
-        let mut dates = cal
-            .dates
+impl From<InitializedCalendar> for HolidayedCalendar {
+    fn from(value: InitializedCalendar) -> Self {
+        let mut dates = value
+            .get_dates()
+            .clone()
             .into_iter()
             .map(|dt| (dt, ("".to_string(), false)))
             .collect::<HashMap<_, _>>();
         // Pull references out from Calendar, drop non-Events and any unsuitable events
-        let input_events = holidays
-            .components
+        // TODO: this is terribly messy looking...
+        let input_events = value
+            .get_holiday_calendars()
+            .into_iter()
+            .fold::<Vec<CalendarComponent>, _>(vec![], |a, cc| {
+                // Q: there must be a simpler way to non-mutably combine vectors
+                let mut o = vec![];
+                o.extend(a);
+                o.extend(cc.components.clone());
+                o
+            })
             .iter()
             .filter_map(|cc| cc.as_event())
-            // Q: What's the correct error handling here?
             .filter_map(|e| SimplifiedEvent::try_from(e).ok())
             .collect::<Vec<_>>();
         debug!("{input_events:?}");
@@ -47,3 +56,8 @@ impl HolidayedCalendar {
         HolidayedCalendar { dates }
     }
 }
+// impl HolidayedCalendar {
+//     // Q: What determines if my function should take references or ownership? Lifetime?
+//     pub fn new(cal: InitializedCalendar) -> Self {
+//     }
+// }

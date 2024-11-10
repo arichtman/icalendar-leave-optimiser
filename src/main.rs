@@ -37,7 +37,7 @@ fn main() -> Result<()> {
     };
     simple_logger::init_with_level(log_level).expect("Error initialising logging, aborting.");
 
-    let collated_input_calendar = collate_files(cli.file)?;
+    let collated_input_calendar = vec![collate_files(cli.file)?];
     let _procedure_out = do_procedure(collated_input_calendar, cli.duration)?;
 
     logic::do_logic(&[false; 1]);
