@@ -6,23 +6,21 @@
     unused_mut
 )]
 
-use chrono::NaiveDate;
-use std::fs::File;
-use std::io::prelude::*;
+use demo::create_and_write_demo_calendar;
+use procedure::do_procedure;
 
 extern crate clap;
 use clap::{arg, command, Parser};
 
-use icalendar::{Calendar, CalendarComponent, Component, DatePerhapsTime, Event, EventLike};
+use icalendar::Calendar;
 use log::debug;
 
 use std::path::PathBuf;
 
-mod cal_opt;
+mod data_transforms;
+mod demo;
 mod logic;
-mod math_cal;
-use self::math_cal::*;
-use crate::cal_opt::cal_opt;
+mod procedure;
 
 fn main() -> std::io::Result<()> {
     let cli = Cli::parse();
@@ -35,9 +33,7 @@ fn main() -> std::io::Result<()> {
     };
     simple_logger::init_with_level(log_level).expect("Error initialising logging, aborting.");
 
-    let cal_opt = cal_opt(cli.file, cli.duration)?;
-    debug!("{cal_opt:#?}");
-    let _ = make_math_calendar(&cal_opt);
+    let _procedure_out = do_procedure(cli.file, cli.duration)?;
 
     logic::do_logic(&[false; 1]);
     create_and_write_demo_calendar()?;
@@ -55,31 +51,7 @@ struct Cli {
     file: Vec<PathBuf>,
     /// Duration to plan for, in days, from today, exclusive.
     #[arg(short, long, action)]
-    duration: u32,
-}
-
-fn create_and_write_demo_calendar() -> Result<(), std::io::Error> {
-    /*
-    Working backwards, we want a fully populated Calendar object, so we can serialize it to disk.
-    Is this even possible?
-    Let's construct one manually...
-    */
-    let mut test_output_cal = Calendar::new();
-    let cal_event = Event::new()
-        .status(icalendar::EventStatus::Confirmed)
-        .starts(DatePerhapsTime::Date(
-            NaiveDate::from_yo_opt(2024, 1).unwrap(),
-        ))
-        .ends(DatePerhapsTime::Date(
-            NaiveDate::from_yo_opt(2024, 5).unwrap(),
-        ))
-        .summary("my event")
-        .done();
-    let cal_comp = CalendarComponent::Event(cal_event);
-    test_output_cal.push(cal_comp);
-    let mut file = File::create("test_output.ics")?;
-    file.write_all(&format!("{test_output_cal}").into_bytes())?;
-    Ok(())
+    duration: u64,
 }
 
 #[cfg(test)]

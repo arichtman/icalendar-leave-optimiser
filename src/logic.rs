@@ -1,10 +1,10 @@
 use rand::Rng;
 
-fn calculate_skew(state: &[bool]) -> f32 {
+fn calculate_skew(_state: &[bool]) -> f32 {
     4.0
 }
 
-fn calculate_contiguous(state: &[bool]) -> f32 {
+fn calculate_contiguous(_state: &[bool]) -> f32 {
     2.0
 }
 
@@ -25,20 +25,20 @@ pub fn assess_fitness(state: &[bool]) -> i32 {
 }
 
 fn select_next_state(state: &[bool]) -> Vec<bool> {
-    let original_fitness_score = assess_fitness(&state);
-    let next_allocation = select_next_allocation(&state);
+    let original_fitness_score = assess_fitness(state);
+    let next_allocation = select_next_allocation(state, original_fitness_score);
     let mut next_state: Vec<bool> = state.into();
     next_state[next_allocation] = true;
-    next_state.into()
+    next_state
 }
 
-fn select_next_allocation(state: &[bool]) -> usize {
+fn select_next_allocation(state: &[bool], _prev_fitness: i32) -> usize {
     // Dumb implementation that's random
     let mut rng = rand::thread_rng();
     rng.gen_range(0..state.len())
 }
 
-pub fn do_logic(state: &[bool]) -> Vec<bool> {
+pub fn do_logic(_state: &[bool]) -> Vec<bool> {
     // TODO: use actual state
     let demo_month = [
         false, false, false, false, false, true, true, false, false, false, false, false, true,
@@ -47,8 +47,8 @@ pub fn do_logic(state: &[bool]) -> Vec<bool> {
     ];
 
     let current_state = demo_month;
-    for days_allocated in 0..5 {
-        let current_state = select_next_state(&current_state);
+    for _days_allocated in 0..5 {
+        let _current_state = select_next_state(&current_state);
     }
     current_state.into()
 }
