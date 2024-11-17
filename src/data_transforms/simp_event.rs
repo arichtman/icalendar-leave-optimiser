@@ -31,8 +31,8 @@ impl TryFrom<&Event> for SimplifiedEvent {
         };
 
         // Remove time granularity
-        let start = start.naive_date();
-        let end = end.naive_date();
+        let start = start.date_naive();
+        let end = end.date_naive();
         // On the odd chance the event is reversed
         let (start, end) = match start > end {
             true => (end, start),
@@ -43,22 +43,5 @@ impl TryFrom<&Event> for SimplifiedEvent {
             end,
             summary: summary.to_string(),
         })
-    }
-}
-
-pub trait AsNaiveDate {
-    fn naive_date(self) -> NaiveDate;
-}
-
-impl AsNaiveDate for DatePerhapsTime {
-    fn naive_date(self) -> NaiveDate {
-        use CalendarDateTime::*;
-        use DatePerhapsTime::*;
-        match self {
-            Date(date) => date,
-            DateTime(Floating(date_time)) => date_time.date(),
-            DateTime(CalendarDateTime::Utc(date_time)) => date_time.date_naive(),
-            DateTime(WithTimezone { date_time, tzid: _ }) => date_time.date(),
-        }
     }
 }
