@@ -1,8 +1,8 @@
 # icalendar-leave-optimiser
 
-Optimising calendar leave so you can be where you wanna be.
+**Moved to private repository**
 
-** WORK IN PROGRESS, DOES NOT REFLECT FINAL PRODUCT. NOT YET FIT FOR USE IN ANY WAY, SHAPE, OR FORM. ZERO WARRANTY IMPLIED, ZERO LIABILITY ASSUMED**
+Optimising calendar leave so you can be where you wanna be.
 
 ## Outline
 
